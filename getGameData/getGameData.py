@@ -3,6 +3,12 @@
 import re
 from urllib import request
 
+#Print Object
+dayObjList1 = [];
+dayObjList2 = [];
+soccerList = [];
+baseballList = [];
+
 ### Soccer ###
 url1 = "http://www.j-league.or.jp/schedule/"
 
@@ -20,7 +26,8 @@ for str1 in re.findall('<tr class="(.*?)</tr>',src,re.S):
 		if str2!=day:
 			day = str2
 			timeArray = str2.split(".")
-			print("\n"+timeArray[1]+"月"+timeArray[2].split("（")[0]+"日")
+			#print("\n"+timeArray[1]+"月"+timeArray[2].split("（")[0]+"日")
+			dayObjList1.append("\n"+timeArray[1]+"月"+timeArray[2].split("（")[0]+"日")
 
 	#Time
 	for str3 in re.findall('<td class="kickoff">(.*?)</td>',str1,re.S):
@@ -28,7 +35,8 @@ for str1 in re.findall('<tr class="(.*?)</tr>',src,re.S):
 		if time[0]==str3:
 			time[1] = time[1]+1
 		elif ""!=time[0]:
-			print(time[0]+"    Jリーグ:"+str(time[1])+"試合")
+			#print(time[0]+"    Jリーグ:"+str(time[1])+"試合")
+			soccerList.append(dayObjList1[-1]+"$$"+time[0]+"    Jリーグ:"+str(time[1])+"試合")
 			time[1] = 1
 		time[0] = str3
 		
@@ -69,14 +77,37 @@ for str1_2 in re.findall('<tr>(.*?)</tr>',src2,re.S):
 			if 1<len(time2[0].split("（")):
 
 				if daylist[len(daylist)-1]!=time2[0].split("（")[0]:
-					print("\n"+time2[0].split("（")[0])
+					#print("\n"+time2[0].split("（")[0])
+					dayObjList2.append("\n"+time2[0].split("（")[0])
 					daylist.append(time2[0].split("（")[0]);
 
-				print(time2[0].split("）")[1]+"    プロ野球:"+str(time2[1])+"試合")
+				#print(time2[0].split("）")[1]+"    プロ野球:"+str(time2[1])+"試合")
+				baseballList.append(dayObjList2[-1]+"$$"+time2[0].split("）")[1]+"    プロ野球:"+str(time2[1])+"試合")
 				time2[1] = 1
 
 		time2[0] = day2+_str3_3
 #Last Item		
-print(time2[0].split("）")[1]+"    プロ野球:"+str(time2[1])+"試合")
+#print(time2[0].split("）")[1]+"    プロ野球:"+str(time2[1])+"試合")
+baseballList.append(dayObjList2[-1]+"$$"+time2[0].split("）")[1]+"    プロ野球:"+str(time2[1])+"試合")
 
 #print
+for dayObj in dayObjList1:
+	print(dayObj)
+
+	for soccerObj in soccerList:
+		count = 0;
+
+		if -1!=soccerObj.find(dayObj):
+			print(soccerObj.split("$$")[1])
+
+		baseballCount = 0
+
+		for baseballObj in baseballList:
+			if -1!=baseballObj.find(dayObj):
+				++baseballCount
+
+		if count <= baseballCount:
+			print(baseballList[count].split("$$")[1])
+
+		++count
+
