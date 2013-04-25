@@ -99,5 +99,12 @@ printArray.append({"date":dayList[-1], "time":lastTime, "soccer":"", "baseball":
 for dayObj in dayList:
 	print(dayObj)
 
-for printObj in printArray:
-	print(printObj)
+	for printObj in printArray:
+
+		if printObj in dayObj:
+			print(printObj)
+
+
+
+
+
