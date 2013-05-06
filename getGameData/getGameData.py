@@ -6,7 +6,7 @@ from datetime import datetime, date, time
 
 dayList = []
 printArray = []
-
+year = date.today().year
 
 
 
@@ -15,15 +15,13 @@ url1 = "http://www.j-league.or.jp/schedule/"
 
 src = request.urlopen(url1).read()
 src = src.decode('shift-jis')
-
 day = ''
-time1 = ["",1]
+initFlag = False
 
 for str1 in re.findall('<tr class="(.*?)</tr>',src,re.S):
 	
 	#Day
 	for str2 in re.findall('<td class="day">(.*?)</td>',str1,re.S):
-		
 		if str2!=day:
 			day = str2
 			timeArray = str2.split(".")
@@ -32,14 +30,15 @@ for str1 in re.findall('<tr class="(.*?)</tr>',src,re.S):
 	#Time
 	for str3 in re.findall('<td class="kickoff">(.*?)</td>',str1,re.S):
 
-		if time1[0]==str3:
-			time1[1] = time1[1]+1
-		elif ""!=time1[0]:
-			printArray.append({"date":dayList[-1], "time":time1[0], "soccer":str(time1[1]), "baseball":""})
-			time1[1] = 1
-		time1[0] = str3
-		
+		if 0<len(printArray):
+			beforeTime = printArray[-1]["time"]
+		else:
+			beforeTime = "hoge"
 
+		if beforeTime==str3:
+			printArray[-1] = {"date":dayList[-1], "time":str3, "soccer":(printArray[-1]["soccer"]+1), "baseball":""}
+		else:
+			printArray.append({"date":dayList[-1], "time":str3, "soccer":1, "baseball":""})
 
 
 ### Baseball ###
@@ -93,6 +92,29 @@ for str1_2 in re.findall('<tr>(.*?)</tr>',src2,re.S):
 #Last Item		
 printArray.append({"date":dayList[-1], "time":lastTime, "soccer":"", "baseball":str(time2[1])})
 
+
+#sort
+flag = True
+while flag == True:
+	flag = False
+
+	for i in range(len(dayList)):
+		_dayList1 = dayList[i].split("月")
+		_dayList2 = _dayList1[1].split("日")
+
+		object1 = date(year,int(_dayList1[0]),int(_dayList2[0]))
+
+		if (i+1)<len(dayList):
+			_dayList1 = dayList[i+1].split("月")
+			_dayList2 = _dayList1[1].split("日")
+			object2 = date(year,int(_dayList1[0]),int(_dayList2[0]))
+
+			if object1>object2:
+				flag = True
+				obj1 = dayList[i]
+				obj2 = dayList[i+1]
+				dayList[i] = obj2
+				dayList[i+1] = obj1
 
 
 #print
