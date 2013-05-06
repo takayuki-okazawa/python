@@ -48,9 +48,7 @@ src2 = request.urlopen(url2).read()
 src2 = src2.decode('utf-8')
 
 day2 = ''
-time2 = ["",1]
 baseballDayList = ["a"]
-lastTime = ""
 
 for str1_2 in re.findall('<tr>(.*?)</tr>',src2,re.S):
 
@@ -66,32 +64,23 @@ for str1_2 in re.findall('<tr>(.*?)</tr>',src2,re.S):
 	#Time
 
 	for str3_3 in re.findall('<em>(.*?)</em>',str1_2,re.S):
-
+		
 		_str3_3 = str3_3.split(' ')[0]
-		lastTime = _str3_3
+		dayStr = day2.split("（")[0]
 
-		if time2[0]==day2+_str3_3 and 1<len(str3_3.split(' ')):
-			time2[1] = time2[1]+1
+		beforeTime = printArray[-1]["time"]
+		beforeDate = printArray[-1]["date"]
+
+		if beforeTime==_str3_3 and beforeDate==dayStr and 1<len(str3_3.split(' ')):
+			printArray[-1] = {"date":printArray[-1]["date"], "time":printArray[-1]["time"], "soccer":"", "baseball":(printArray[-1]["baseball"]+1)}
 
 		elif 1<len(str3_3.split(' ')):
-
-			if 1<len(time2[0].split("（")):
-
-				if baseballDayList[len(baseballDayList)-1]!=time2[0].split("（")[0]:
 					
-					if (time2[0].split("（")[0]) not in dayList:
-						dayList.append(time2[0].split("（")[0])
+			if dayStr not in dayList:
+				dayList.append(dayStr)
 
-					baseballDayList.append(time2[0].split("（")[0])
-
-				printArray.append({"date":dayList[-1], "time":_str3_3, "soccer":"", "baseball":str(time2[1])})
-				time2[1] = 1
-
-		time2[0] = day2+_str3_3
-
-#Last Item		
-printArray.append({"date":dayList[-1], "time":lastTime, "soccer":"", "baseball":str(time2[1])})
-
+			printArray.append({"date":dayStr, "time":_str3_3, "soccer":"", "baseball":1})
+			
 
 #sort
 flag = True
