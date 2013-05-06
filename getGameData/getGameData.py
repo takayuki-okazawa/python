@@ -2,6 +2,7 @@
 
 import re
 from urllib import request
+from datetime import datetime, date, time
 
 dayList = []
 printArray = []
@@ -16,7 +17,7 @@ src = request.urlopen(url1).read()
 src = src.decode('shift-jis')
 
 day = ''
-time = ["",1]
+time1 = ["",1]
 
 for str1 in re.findall('<tr class="(.*?)</tr>',src,re.S):
 	
@@ -31,12 +32,12 @@ for str1 in re.findall('<tr class="(.*?)</tr>',src,re.S):
 	#Time
 	for str3 in re.findall('<td class="kickoff">(.*?)</td>',str1,re.S):
 
-		if time[0]==str3:
-			time[1] = time[1]+1
-		elif ""!=time[0]:
-			printArray.append({"date":dayList[-1], "time":time[0], "soccer":str(time[1]), "baseball":""})
-			time[1] = 1
-		time[0] = str3
+		if time1[0]==str3:
+			time1[1] = time1[1]+1
+		elif ""!=time1[0]:
+			printArray.append({"date":dayList[-1], "time":time1[0], "soccer":str(time1[1]), "baseball":""})
+			time1[1] = 1
+		time1[0] = str3
 		
 
 
@@ -94,15 +95,60 @@ printArray.append({"date":dayList[-1], "time":lastTime, "soccer":"", "baseball":
 
 
 
-
 #print
 for dayObj in dayList:
 	print(dayObj)
+	dayPrintObj = []
+	dayTimeObj = []
 
 	for printObj in printArray:
+		if dayObj == printObj['date']:
+			dayPrintObj.append(printObj)
+			timeArray = printObj['time'].split(':')
+			t = time(int(timeArray[0]),int(timeArray[1]))
+			dayTimeObj.append(t)
 
-		if printObj in dayObj:
-			print(printObj)
+	#sort
+	flag = True
+	while flag == True:
+		flag = False
+
+		for i in range(len(dayTimeObj)):
+
+			if (i+1)<len(dayTimeObj) and dayTimeObj[i]>dayTimeObj[i+1]:
+				flag = True
+				object1 = dayTimeObj[i]
+				object2 = dayTimeObj[i+1]
+				dayTimeObj[i] = object2
+				dayTimeObj[i+1] = object1
+
+	#delete
+	flag = True
+	while flag == True:
+		flag = False
+
+		for i in range(len(dayTimeObj)):
+
+			if (i+1)<len(dayTimeObj) and dayTimeObj[i]==dayTimeObj[i+1]:
+				flag = True
+				del dayTimeObj[i]
+
+
+	for timeValue in dayTimeObj:
+		soccerPrint = 0
+		baseballPrint = 0
+
+		for _dayPrintObj in dayPrintObj:
+			timeArray = _dayPrintObj['time'].split(':')
+			t = time(int(timeArray[0]),int(timeArray[1]))
+			if timeValue == t:
+				if ''!=_dayPrintObj["soccer"]:
+					soccerPrint += int(_dayPrintObj["soccer"])
+				if ''!=_dayPrintObj["baseball"]:
+					baseballPrint += int(_dayPrintObj["baseball"])
+
+		print(timeValue.strftime("%H:%M") + ' サッカー:'+str(soccerPrint)+' 野球:'+str(baseballPrint))
+
 
 
 
