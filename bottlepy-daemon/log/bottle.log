@@ -1,0 +1,5 @@
+2013-07-04 23:19:02,280 pid:665/BottleProcess <ERROR> Error during service start, /Users/okazawa/Desktop/bottlepy-daemon/run doesn't exist. Can't create pidfile /Users/okazawa/Desktop/bottlepy-daemon/run/bottle.pid
+2013-07-04 23:21:49,399 pid:680/BottleProcess <INFO> Bottle 0.11.rc1 server starting up
+2013-07-04 23:21:59,357 pid:680/BottleProcess <INFO> 1.0.0.127.in-addr.arpa "GET / HTTP/1.1" 200 13
+2013-07-04 23:21:59,387 pid:680/BottleProcess <INFO> 1.0.0.127.in-addr.arpa "GET /favicon.ico HTTP/1.1" 404 742
+2013-07-04 23:23:47,074 pid:688/BottleProcess <INFO> service [680] was stopped by SIGTERM signal
