@@ -1,30 +1,26 @@
-# How to use bottle.py with pyservice
+# Command
 
-Bottle is a fast and simple micro-framework for small web applications. It offers request dispatching (URL routing) with URL parameter support, templates, a built-in HTTP Server and adapters for many third party WSGI/HTTP-server and template engines - all in a single file and with no dependencies other than the Python Standard Library. Homepage and documentation: [http://bottlepy.org/](http://bottlepy.org/) License: MIT
+###start
+$ python -m packages.pyservice bottled.BottleProcess start  
+Starting process with BottleProcess...
 
-`bottled.py` allows to run built-in HTTP Server of bottle.py as a service. There's not too much logic - just test page 'BottleProcess' is available by http://127.0.0.1:8080 but it can be extended easy. For more details how to develop web applications with bottle.py please read [documentation](http://bottlepy.org/docs/dev/)
+###stop
+$ python -m packages.pyservice bottled.BottleProcess stop  
+Stopping process BottleProcess...
 
-There's two ways how to control bottle.py HTTP server:
- - via pyservice console
- - or directly via bottled.py
+###restart
+$ python -m packages.pyservice bottled.BottleProcess restart  
+Stopping process BottleProcess...  
+Starting process with BottleProcess...
 
-*Note!* All below commands should be executed from examples/bottlepy-daemon directory
-``` 
-$ python -m packages.pysevice bottled.BottleProcess
-usage: pyservice [-v] [-h] [process] [{start,stop,restart,status}]
+###status
+$ python -m packages.pyservice bottled.BottleProcess status  
+Process is not running
 
-positional arguments:
-  process               process class path to run (modulename.ProcessClass) or
-                        configuration file path to use (/path/to/config.py)
-  {start,stop,restart,status}
+===
 
-optional arguments:
-  -v, --version         show program's version number and exit
-  -h, --help            show program's help text and exit
-```
-Or
-```
-$ python bottled.py 
-usage: bottled <start,stop,restart,status>
-```
-
+# create folder
+####1. Log
+root/log
+####2. ?
+root/run
